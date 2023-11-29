@@ -10,9 +10,18 @@ public class PairMaker {
 
 	List<Pair> matchResult = new ArrayList<>();
 
-	public List<Pair> make(Crew crew, List<Pair> otherPairs) {
+	public List<Pair> make(Crew crew, List<List<Pair>> others) {
 
-		match(crew);
+		for(int i = 0; i < 3; i++) {
+			try {
+				match(crew);
+				for (List<Pair> other : others) {
+					validateDuplication(other);
+				}
+			} catch (IllegalStateException illegalStateException) {
+				matchResult.clear();
+			}
+		}
 
 		return matchResult;
 	}
@@ -56,6 +65,15 @@ public class PairMaker {
 			inputPair.add(shuffledCrew.get(i + 1));
 
 			matchResult.add(new Pair(inputPair));
+		}
+	}
+
+	public void validateDuplication(List<Pair> comparedPairs) {
+
+		for (Pair eachResult : matchResult) {
+			for (Pair eachComparedPair : comparedPairs) {
+				eachResult.validateDuplication(eachComparedPair);
+			}
 		}
 	}
 

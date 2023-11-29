@@ -1,5 +1,6 @@
 package pairmatching.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,6 @@ import pairmatching.domain.Pair;
 import pairmatching.input.InputMachine;
 import pairmatching.output.printer;
 import pairmatching.service.PairMaker;
-import pairmatching.util.Transducer;
 
 public class FunctionController {
 
@@ -72,13 +72,30 @@ public class FunctionController {
 
 		if (courseName.equals("백엔드")) {
 
+			List<List<Pair>> others = new ArrayList<>();
+
+			List<String> mission = new ArrayList<>();
+			for (Level eachLevel : Level.values()) {
+				if (eachLevel.getName().equals(inputLevel)) {
+					mission = eachLevel.getDetail();
+				}
+			}
+
+			for (String eachMission : mission) {
+				others.add(backendSummary.get(inputLevel).getResultPair(eachMission));
+			}
+
 			List<Pair> resultPair = backendSummary.get(inputLevel).getResultPair(inputMission);
 
 			if (!resultPair.isEmpty()) {
 				String rematchOption = InputMachine.inputRematchOption();
 				if (rematchOption.equals("예")) {
 					PairMaker pairMaker = new PairMaker();
-					List<Pair> pairResult = pairMaker.make(backendCrew);
+					List<Pair> pairResult = pairMaker.make(backendCrew, others);
+
+					if(pairResult.isEmpty()) {
+						System.out.println("[ERROR] 매칭에 실패했습니다.");
+					}
 
 					backendSummary.get(inputLevel).replaceMission(inputMission, pairResult);
 					resultPair = backendSummary.get(inputLevel).getResultPair(inputMission);
@@ -88,7 +105,11 @@ public class FunctionController {
 
 			if (resultPair.isEmpty()) {
 				PairMaker pairMaker = new PairMaker();
-				List<Pair> pairResult = pairMaker.make(backendCrew);
+				List<Pair> pairResult = pairMaker.make(backendCrew, others);
+
+				if(pairResult.isEmpty()) {
+					System.out.println("[ERROR] 매칭에 실패했습니다.");
+				}
 
 				backendSummary.get(inputLevel).replaceMission(inputMission, pairResult);
 				resultPair = backendSummary.get(inputLevel).getResultPair(inputMission);
@@ -98,6 +119,19 @@ public class FunctionController {
 
 		if (courseName.equals("프론트엔드")) {
 
+			List<List<Pair>> others = new ArrayList<>();
+
+			List<String> mission = new ArrayList<>();
+			for (Level eachLevel : Level.values()) {
+				if (eachLevel.getName().equals(inputLevel)) {
+					mission = eachLevel.getDetail();
+				}
+			}
+
+			for (String eachMission : mission) {
+				others.add(frontendSummary.get(inputLevel).getResultPair(eachMission));
+			}
+
 			List<Pair> resultPair = frontendSummary.get(inputLevel).getResultPair(inputMission);
 			System.out.println(resultPair);
 
@@ -105,7 +139,11 @@ public class FunctionController {
 				String rematchOption = InputMachine.inputRematchOption();
 				if (rematchOption.equals("예")) {
 					PairMaker pairMaker = new PairMaker();
-					List<Pair> pairResult = pairMaker.make(frontendCrew);
+					List<Pair> pairResult = pairMaker.make(frontendCrew, others);
+
+					if(pairResult.isEmpty()) {
+						System.out.println("[ERROR] 매칭에 실패했습니다.");
+					}
 
 					frontendSummary.get(inputLevel).replaceMission(inputMission, pairResult);
 
@@ -114,7 +152,11 @@ public class FunctionController {
 
 			if (resultPair.isEmpty()) {
 				PairMaker pairMaker = new PairMaker();
-				List<Pair> pairResult = pairMaker.make(frontendCrew);
+				List<Pair> pairResult = pairMaker.make(frontendCrew, others);
+
+				if(pairResult.isEmpty()) {
+					System.out.println("[ERROR] 매칭에 실패했습니다.");
+				}
 
 				frontendSummary.get(inputLevel).replaceMission(inputMission, pairResult);
 

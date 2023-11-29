@@ -28,7 +28,7 @@ public class InputMachine {
 
 				errorSign = false;
 
-			} catch (IllegalStateException illegalStateException) {
+			} catch (IllegalArgumentException illegalArgumentException) {
 				errorSign = true;
 				System.out.println("[ERROR] 잘못 입력하셨습니다.");
 
@@ -76,6 +76,10 @@ public class InputMachine {
 	public static List<String> toList(String input) {
 
 		final String SEPARATOR = ",";
+
+		if(!input.contains(SEPARATOR)) {
+			throw new IllegalArgumentException();
+		}
 
 		List<String> information = Arrays.stream(input.split(SEPARATOR))
 			.map(String::trim)
@@ -148,7 +152,7 @@ public class InputMachine {
 	}
 
 	private static void validateRematchOption(String rematchOption) {
-		if(!rematchOption.equals("예") && !rematchOption.equals("아니오")) {
+		if(!rematchOption.equals("네") && !rematchOption.equals("아니오")) {
 			throw new IllegalArgumentException();
 		}
 	}

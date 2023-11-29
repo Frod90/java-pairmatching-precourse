@@ -1,5 +1,6 @@
 package pairmatching.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import camp.nextstep.edu.missionutils.Randoms;
@@ -29,7 +30,10 @@ public class Crew {
 	}
 
 	public List<String> shuffleCrew() {
-		return Randoms.shuffle(course.getCrewNames());
+
+		List<String> crewNames = new ArrayList<>(course.getCrewNames());
+
+		return Randoms.shuffle(crewNames);
 	}
 
 	public Course getCourse() {

@@ -12,10 +12,10 @@ public class Pair {
 		this.pair = inputPair;
 	}
 
-	public void validateDuplication(Pair other) {
+	public void validateDuplication(Pair comparedPair) {
 
-		String crew1 = other.pair.get(0);
-		String crew2 = other.pair.get(1);
+		String crew1 = comparedPair.pair.get(0);
+		String crew2 = comparedPair.pair.get(1);
 
 		if(this.pair.contains(crew1) && this.pair.contains(crew2)) {
 			throw new IllegalStateException();
